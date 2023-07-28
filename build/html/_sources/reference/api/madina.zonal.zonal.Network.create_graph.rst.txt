@@ -1,0 +1,6 @@
+﻿madina.zonal.zonal.Network.create\_graph
+========================================
+
+.. currentmodule:: madina.zonal.zonal
+
+.. automethod:: Network.create_graph

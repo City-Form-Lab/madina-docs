@@ -1,0 +1,6 @@
+﻿madina.zonal.zonal.Network.update\_light\_graph
+===============================================
+
+.. currentmodule:: madina.zonal.zonal
+
+.. automethod:: Network.update_light_graph

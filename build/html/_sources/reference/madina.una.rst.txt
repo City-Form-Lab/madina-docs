@@ -1,0 +1,45 @@
+madina.una package
+==================
+
+Submodules
+----------
+
+madina.una.betweenness module
+-----------------------------
+
+.. automodule:: madina.una.betweenness
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+madina.una.elastic module
+-------------------------
+
+.. automodule:: madina.una.elastic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+madina.una.paths module
+-----------------------
+
+.. automodule:: madina.una.paths
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+madina.una.una\_utils module
+----------------------------
+
+.. automodule:: madina.una.una_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: madina.una
+   :members:
+   :undoc-members:
+   :show-inheritance:

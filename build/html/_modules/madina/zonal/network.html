@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>madina.zonal.network &#8212; Madina 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/madina/zonal/network';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Madina 0.0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/betweenness.html">
+                        Calculating Betweenness
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/reference.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/installation.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorial/betweenness.html">
+                        Calculating Betweenness
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../reference/reference.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">madina.zonal.network</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for madina.zonal.network</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">geopandas</span> <span class="kn">import</span> <span class="n">GeoDataFrame</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">wkt</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span> <span class="k">as</span> <span class="n">geo</span>
+
+<span class="kn">from</span> <span class="nn">madina.zonal.layer</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># street nodes, origin nodes, destination_nodes are the different types of nodes</span>
+
+
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.html#madina.zonal.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A network data structure composed of weighted nodes and edges that can be used to carry out</span>
+<span class="sd">    network operations like betweenness and elastic weight calculation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nodes: GeoDataFrame</span>
+<span class="sd">        The nodes in the network</span>
+<span class="sd">    edges: GeoDataFrame</span>
+<span class="sd">        The edges in the network</span>
+<span class="sd">    projected_crs: str</span>
+<span class="sd">        The CRS that the nodes and edges are in</span>
+<span class="sd">    turn_threshold_degree: float, defaults to 45</span>
+<span class="sd">        The threshold of a turn to be considered penalizable</span>
+<span class="sd">    turn_penalty_amount: float, defaults to 30</span>
+<span class="sd">        The penalty added to a turn</span>
+<span class="sd">    weight_attribute: </span>
+<span class="sd">        The attribute name of the layer that was used as the edge weight in the created </span>
+<span class="sd">        network. If None, the geometric length of the edges was used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Network.__init__"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.html#madina.zonal.network.Network.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">nodes</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span> 
+                 <span class="n">edges</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span> 
+                 <span class="n">projected_crs</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                 <span class="n">turn_threshold_degree</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> 
+                 <span class="n">turn_penalty_amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> 
+                 <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+                 <span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">nodes</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">edges</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c1"># throw Error here</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">projected_crs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_threshold_degree</span> <span class="o">=</span> <span class="n">turn_threshold_degree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_penalty_amount</span> <span class="o">=</span> <span class="n">turn_penalty_amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_attribute</span> <span class="o">=</span> <span class="n">weight_attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d_graph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">od_graph</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="Network.set_node_value"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.set_node_value.html#madina.zonal.network.Network.set_node_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_node_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the node at (`idx`, `label`) value in the network to `new_value`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        idx: int</span>
+<span class="sd">            The index of the node to set value</span>
+<span class="sd">        label: str</span>
+<span class="sd">            The label of the given node to set to the new value</span>
+<span class="sd">        new_value: any</span>
+<span class="sd">            The new value to set to, raises exception if the type does not match with old label</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Network.create_graph"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.create_graph.html#madina.zonal.network.Network.create_graph">[docs]</a>    <span class="k">def</span> <span class="nf">create_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light_graph</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">d_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">od_graph</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the corresponding graphs in the Network object based on the current nodes and edges</span>
+<span class="sd">        `light_graph` - contains only network nodes and edges</span>
+<span class="sd">        `d_graph` - contains all destination nodes</span>
+<span class="sd">        `od_graph` - contains all origin and destination nodes</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        light_graph: bool, defaults to False</span>
+<span class="sd">            if true, create `self.light_graph`</span>
+<span class="sd">        d_graph: bool, defaults to True</span>
+<span class="sd">            if true, create `self.d_graph`</span>
+<span class="sd">        od_graph: bool, defaults to False</span>
+<span class="sd">            if true, create `self.od_graph`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">light_graph</span><span class="p">:</span>
+            <span class="n">street_node_gdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;street_node&quot;</span><span class="p">]</span>
+            <span class="c1">## no need to filter edges, because in light graph, they haven&#39;t been inseted</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">]),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">]),</span>
+                    <span class="n">weight</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="n">idx</span>
+                <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">street_node_gdf</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">)][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">street_node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">d_graph</span><span class="p">:</span>
+            <span class="n">d_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;destination&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># TODO: Consider deep copies?</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="n">d_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">d_graph</span> <span class="o">=</span> <span class="n">graph</span>
+
+        <span class="k">if</span> <span class="n">od_graph</span><span class="p">:</span>
+            <span class="n">od_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">])]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="n">od_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">od_graph</span> <span class="o">=</span> <span class="n">graph</span>
+
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Network.visualize_graph"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.visualize_graph.html#madina.zonal.network.Network.visualize_graph">[docs]</a>    <span class="k">def</span> <span class="nf">visualize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates an HTML map of the `zonal` object.</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">        Not Implemented Yet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Network.update_light_graph"><a class="viewcode-back" href="../../../reference/api/madina.zonal.network.Network.update_light_graph.html#madina.zonal.network.Network.update_light_graph">[docs]</a>    <span class="k">def</span> <span class="nf">update_light_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">remove_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the given graph object by adding nodes to and removing nodes from it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        graph: networkx.Graph</span>
+<span class="sd">            The given networkx Graph object to be edited</span>
+<span class="sd">        add_nodes: list, defaults to an empty list</span>
+<span class="sd">            a list of nodes to be added</span>
+<span class="sd">        remove_nodes: list, defaults to an empty list</span>
+<span class="sd">            a list of nodes to be removed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;added_nodes&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">:</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Add nodes</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">add_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="n">existing_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">node_idx</span> <span class="ow">in</span> <span class="n">add_nodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">node_idx</span> <span class="ow">in</span> <span class="n">existing_nodes</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;node (</span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s1">) is already added...</span><span class="si">{</span><span class="n">add_nodes</span><span class="w"> </span><span class="si">= }</span><span class="se">\t</span><span class="si">{</span><span class="n">existing_nodes</span><span class="w"> </span><span class="si">= }</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+                    <span class="n">add_nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+
+            <span class="n">edge_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;nearest_edge_id&quot;</span><span class="p">):</span>
+                <span class="n">edge_nodes</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                
+            <span class="k">for</span> <span class="n">edge_id</span> <span class="ow">in</span> <span class="n">edge_nodes</span><span class="p">:</span>
+                <span class="n">neighbors</span> <span class="o">=</span> <span class="n">edge_nodes</span><span class="p">[</span><span class="n">edge_id</span><span class="p">]</span>
+                <span class="n">insert_neighbors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">add_nodes</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">neighbors</span><span class="p">))</span>
+                <span class="n">existing_neighbors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span> <span class="o">-</span> <span class="n">insert_neighbors</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">insert_neighbors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                    <span class="c1">#self.nodes.at[node_idx, &quot;&quot;]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">node_idx</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;edge_end_node&quot;</span><span class="p">]),</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="n">node_idx</span><span class="p">),</span>
+                        <span class="n">weight</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;weight_to_end&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">edge_id</span>
+                    <span class="p">)</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="n">node_idx</span><span class="p">),</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;edge_start_node&quot;</span><span class="p">]),</span>
+                        <span class="n">weight</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s1">&#39;weight_to_start&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">edge_id</span>
+                    <span class="p">)</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;edge_end_node&quot;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;edge_start_node&quot;</span><span class="p">]))</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># start a chain addition of neighbors, starting from the &#39;left&#39;,</span>
+                    <span class="c1"># so, need to sort based on distance from left</span>
+                    <span class="n">segment_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">edge_id</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+
+                    <span class="n">chain_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;edge_end_node&quot;</span><span class="p">]</span>
+                    <span class="n">chain_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;edge_start_node&quot;</span><span class="p">]</span>
+
+                    <span class="n">chain_distances</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;weight_to_end&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">existing_neighbors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># if there are no existing neighbors, remove the original edge</span>
+                        <span class="n">graph</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">chain_start</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">chain_end</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if there are existing neighbors, remove them. This would also remove their associated edges</span>
+                        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">existing_neighbors</span><span class="p">:</span>
+                            <span class="n">graph</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+                    <span class="n">chain_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">chain_start</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbors</span> <span class="o">+</span> <span class="p">[</span><span class="n">chain_end</span><span class="p">]</span>
+                    <span class="n">chain_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">chain_distances</span> <span class="o">+</span> <span class="p">[</span><span class="n">segment_weight</span><span class="p">]</span>
+
+                    <span class="n">chain_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chain_nodes</span><span class="p">)</span>
+                    <span class="n">chain_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chain_distances</span><span class="p">)</span>
+                    <span class="n">sorting_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">chain_distances</span><span class="p">)</span>
+
+                    <span class="c1"># np arrays allows calling them by a list index</span>
+                    <span class="n">chain_nodes</span> <span class="o">=</span> <span class="n">chain_nodes</span><span class="p">[</span><span class="n">sorting_index</span><span class="p">]</span>
+                    <span class="n">chain_distances</span> <span class="o">=</span> <span class="n">chain_distances</span><span class="p">[</span><span class="n">sorting_index</span><span class="p">]</span>
+                    <span class="c1"># print(f&quot;{chain_nodes = }\t{chain_distances}&quot;)</span>
+                    <span class="n">accumilated_weight</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chain_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">chain_nodes</span><span class="p">[</span><span class="n">seq</span><span class="p">]),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">chain_nodes</span><span class="p">[</span><span class="n">seq</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]),</span>
+                            <span class="c1"># TODO: change this to either defaults to distance or a specified column for a weight..</span>
+                            <span class="n">weight</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">chain_distances</span><span class="p">[</span><span class="n">seq</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">chain_distances</span><span class="p">[</span><span class="n">seq</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
+                            <span class="c1">##avoiding small negative numbers due to numerical error when two nodes are superimposed.</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">edge_id</span>
+                        <span class="p">)</span>
+                        <span class="n">accumilated_weight</span> <span class="o">+=</span> <span class="p">(</span><span class="n">chain_distances</span><span class="p">[</span><span class="n">seq</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">chain_distances</span><span class="p">[</span><span class="n">seq</span><span class="p">])</span>
+        
+        <span class="c1"># Removing nodes</span>
+        <span class="k">for</span> <span class="n">node_idx</span> <span class="ow">in</span> <span class="n">remove_nodes</span><span class="p">:</span>
+            <span class="n">node_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node_idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;attempting to remove node </span><span class="si">{</span><span class="n">node_idx</span><span class="si">}</span><span class="s2"> that&#39;s not in graph </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">node_idx</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;attempting to remove a node </span><span class="si">{</span><span class="n">node_idx</span><span class="w"> </span><span class="si">= }</span><span class="s2"> that&#39;s not degree 2, adjacent to: </span><span class="si">{</span><span class="n">graph</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">neighbors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">node_idx</span><span class="p">])</span>
+
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="n">start</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> \
+                    <span class="o">+</span> <span class="n">graph</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">node_idx</span><span class="p">][</span><span class="n">end</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+
+            <span class="n">original_edge_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">node_idx</span><span class="p">,</span> <span class="s2">&quot;nearest_edge_id&quot;</span><span class="p">]</span>
+
+            <span class="c1"># remove node after we got the attributes we needed..</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node_idx</span><span class="p">)</span>
+            <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                <span class="n">start</span><span class="p">,</span>
+                <span class="n">end</span><span class="p">,</span>
+                <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">original_edge_id</span>
+            <span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">graph</span></div></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, City Form Lab.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

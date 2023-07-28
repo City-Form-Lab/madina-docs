@@ -1,0 +1,19 @@
+madina package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   madina.una
+   madina.zonal
+
+Module contents
+---------------
+
+.. automodule:: madina
+   :members:
+   :undoc-members:
+   :show-inheritance:

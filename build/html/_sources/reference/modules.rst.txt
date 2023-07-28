@@ -1,0 +1,7 @@
+madina
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   madina

@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>madina.zonal.network_utils &mdash; Madina 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Madina
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">🚀 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/betweenness.html">Calculating Betweenness</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/madina.una.html">madina.una package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/madina.zonal.html">madina.zonal package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Madina</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>madina.zonal.network_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for madina.zonal.network_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">geopandas</span> <span class="kn">import</span> <span class="n">GeoDataFrame</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">get_x</span><span class="p">,</span> <span class="n">get_y</span><span class="p">,</span> <span class="n">get_point</span>
+
+<span class="k">def</span> <span class="nf">_node_edge_builder</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">tolerance</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># use vectorized implementaytion</span>
+        <span class="n">point_xy</span> <span class="o">=</span> <span class="n">GeoPandaExtractor</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">node_indexer</span><span class="p">,</span> <span class="n">node_points</span><span class="p">,</span> <span class="n">node_dgree</span><span class="p">,</span> <span class="n">edge_start_node</span><span class="p">,</span> <span class="n">edge_end_node</span> <span class="o">=</span> <span class="n">_vectorized_node_edge_builder</span><span class="p">(</span>
+            <span class="n">point_xy</span><span class="p">)</span>
+        <span class="c1"># use spatial index implementation</span>
+        <span class="c1"># could this gain effeciency by being sorted?</span>
+        <span class="c1"># TODO: complete the implementation of this case by copyinfg the for-loop thT UTILIz MATCHING RESULTS..</span>
+        <span class="n">point_geometries</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">boundary</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span>
+            <span class="n">index_parts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">matching</span> <span class="o">=</span> <span class="n">point_geometries</span><span class="o">.</span><span class="n">sindex</span><span class="o">.</span><span class="n">query_bulk</span><span class="p">(</span>
+            <span class="n">point_geometries</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
+
+        <span class="c1"># construct node and edge gdfs</span>
+        <span class="n">edge_count</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">edge_count</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+            <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">edge_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;length&quot;</span><span class="p">:</span>   <span class="n">length</span><span class="p">,</span>
+                <span class="s2">&quot;weight&quot;</span><span class="p">:</span>   <span class="n">length</span> <span class="k">if</span> <span class="n">weight_attribute</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="p">[</span><span class="n">weight_attribute</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">)),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span>     <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;street&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">edge_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;parent_street_id&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+                <span class="s2">&quot;start&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">edge_start_node</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+                <span class="s2">&quot;end&quot;</span><span class="p">:</span>      <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">edge_end_node</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+            <span class="p">},</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">node_count</span> <span class="o">=</span> <span class="n">node_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">node_count</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">node_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;source_layer&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;streets&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;source_id&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span>         <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;street_node&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;weight&quot;</span><span class="p">:</span>       <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="c1">#&quot;nearest_street_id&quot;: pd.Series(np.repeat(np.array([0], dtype=np.int32), repeats=node_count), fastpath=True, index=index, dtype=np.int32),</span>
+                <span class="c1">#&quot;nearest_street_node_distance&quot;: pd.Series(np.repeat(np.array([{}], dtype=object), repeats=node_count), fastpath=True, index=index),</span>
+                <span class="s2">&quot;degree&quot;</span><span class="p">:</span>       <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">node_dgree</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+                <span class="c1"># &quot;connected_edges&quot;: connected_edges</span>
+            <span class="p">},</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+            <span class="c1"># crs=geometry_gdf.crs,</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">point_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">node_indexer</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">point_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">node_indexer</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">tolerance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1">#node_gdf, edge_gdf = _effecient_tolerance_network_nodes_edges(</span>
+        <span class="n">node_gdf</span><span class="p">,</span> <span class="n">edge_gdf</span> <span class="o">=</span> <span class="n">_tolerance_network_nodes_edges</span><span class="p">(</span>
+            <span class="n">geometry_gdf</span><span class="o">=</span><span class="n">geometry_gdf</span><span class="p">,</span>
+            <span class="n">weight_attribute</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tolerance must either be zero or a positive number, </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2"> was given.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">node_gdf</span><span class="p">,</span> <span class="n">edge_gdf</span> <span class="c1"># Return Adjacency List here...</span>
+
+<span class="k">def</span> <span class="nf">_vectorized_node_edge_builder</span><span class="p">(</span><span class="n">point_xy</span><span class="p">):</span>
+    <span class="c1"># the point_xy input is a 2 by n matrix. where the start point and end point of an edge are in alternating order..</span>
+    <span class="c1"># unique parameter is expected to come from a spatial index, on points that are sorted.</span>
+
+    <span class="c1"># input setup</span>
+    <span class="n">point_count</span> <span class="o">=</span> <span class="n">point_xy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">edge_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">point_count</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">point_types</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">edge_count</span><span class="p">)</span>
+    <span class="n">edge_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">point_segment_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">edge_ids</span><span class="p">,</span> <span class="n">edge_ids</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">point_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># sorting points by x then by y. This is to make it effecient to link the similarly sorted unique nodes with each point occurance</span>
+    <span class="c1"># sort by x then by y ## np.lexsort is not supported with njit</span>
+    <span class="n">sorter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">lexsort</span><span class="p">((</span><span class="n">point_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">point_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]))</span>
+    <span class="n">sorted_point_xy</span> <span class="o">=</span> <span class="n">point_xy</span><span class="p">[:,</span> <span class="n">sorter</span><span class="p">]</span>
+    <span class="n">point_xy_T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">sorted_point_xy</span><span class="p">)</span>
+
+    <span class="c1"># Resorting inputs:</span>
+    <span class="n">sorted_point_types</span> <span class="o">=</span> <span class="n">point_types</span><span class="p">[</span><span class="n">sorter</span><span class="p">]</span>
+    <span class="n">sorted_point_segment_ids</span> <span class="o">=</span> <span class="n">point_segment_ids</span><span class="p">[</span><span class="n">sorter</span><span class="p">]</span>
+
+    <span class="c1"># finding unique points (which are from now on, refereed to as nodes.)</span>
+    <span class="c1"># indices # np.unique is only supported in njit if no arguments are given.</span>
+    <span class="n">unique_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
+        <span class="n">point_xy_T</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># node data</span>
+    <span class="n">node_points</span> <span class="o">=</span> <span class="n">unique_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">node_first_occurance</span> <span class="o">=</span> <span class="n">unique_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">node_indexer</span> <span class="o">=</span> <span class="n">sorter</span><span class="p">[</span><span class="n">node_first_occurance</span><span class="p">]</span>
+
+    <span class="n">node_dgree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unique_nodes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="c1"># connected_edges = np.empty(node_count, dtype=np.array)</span>
+    <span class="c1"># edge data</span>
+
+    <span class="n">edge_start_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">edge_end_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># this is to make sure if the last point occurs for the first time, we&#39;ll have a proper</span>
+    <span class="k">if</span> <span class="n">node_first_occurance</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="p">(</span><span class="n">point_count</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_first_occurance</span><span class="p">,</span> <span class="n">point_count</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">range_start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">node_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">range_end</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">node_first_occurance</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="p">[</span><span class="n">node_first_occurance</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="c1"># connected_edges[node_index] = sorted_point_segment_ids[range_start:range_end]</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">point_xy_T</span><span class="p">[</span><span class="n">range_start</span><span class="p">:</span><span class="n">range_end</span><span class="p">,</span> <span class="p">:]:</span>
+            <span class="n">edge_index</span> <span class="o">=</span> <span class="n">sorted_point_segment_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">sorted_point_types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">edge_start_node</span><span class="p">[</span><span class="n">edge_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_index</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">edge_end_node</span><span class="p">[</span><span class="n">edge_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_index</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">range_start</span> <span class="o">=</span> <span class="n">range_end</span>
+        <span class="n">node_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">node_indexer</span><span class="p">,</span> <span class="n">node_points</span><span class="p">,</span> <span class="n">node_dgree</span><span class="p">,</span> <span class="n">edge_start_node</span><span class="p">,</span> <span class="n">edge_end_node</span>
+
+<div class="viewcode-block" id="GeoPandaExtractor"><a class="viewcode-back" href="../../../reference/madina.zonal.html#madina.zonal.network_utils.GeoPandaExtractor">[docs]</a><span class="k">def</span> <span class="nf">GeoPandaExtractor</span><span class="p">(</span><span class="n">poly_line_data</span><span class="p">):</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="p">[</span><span class="n">get_point</span><span class="p">(</span><span class="n">poly_line_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                     <span class="n">get_point</span><span class="p">(</span><span class="n">poly_line_data</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="n">get_x</span><span class="p">,</span> <span class="n">get_y</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">_tolerance_network_nodes_edges</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">length</span> <span class="k">if</span> <span class="n">weight_attribute</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">geometry_gdf</span><span class="p">[</span><span class="n">weight_attribute</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+    <span class="n">geometry_gdf</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#geometry_gdf = geometry_gdf[geometry_gdf[&quot;weight&quot;] &gt;= tolerance].reset_index(drop=True)</span>
+    <span class="n">point_geometries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>
+            <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">point_types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">*</span>  <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">point_segment_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="n">point_count</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="n">geometry_collector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">point_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+    <span class="n">degree_collector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">point_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span>
+
+    <span class="n">edge_count</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">edge_collector</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="n">matching</span> <span class="o">=</span> <span class="n">point_geometries</span><span class="o">.</span><span class="n">sindex</span><span class="o">.</span><span class="n">query_bulk</span><span class="p">(</span>
+        <span class="n">point_geometries</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">tolerance</span><span class="p">),</span> <span class="n">predicate</span><span class="o">=</span><span class="s2">&quot;intersects&quot;</span><span class="p">)</span>
+    <span class="c1"># grouping points..</span>
+    <span class="n">unique_points</span><span class="p">,</span> <span class="n">intersection_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
+        <span class="n">matching</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+    <span class="n">point_intersection</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">current_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_points</span><span class="p">,</span> <span class="n">intersection_count</span><span class="p">):</span>
+        <span class="n">point_intersection</span><span class="p">[</span><span class="n">point</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">matching</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">current_index</span><span class="p">:</span><span class="n">current_index</span><span class="o">+</span><span class="n">count</span><span class="p">])</span> <span class="o">-</span> <span class="p">{</span><span class="n">point</span><span class="p">}</span>
+        <span class="n">current_index</span> <span class="o">=</span> <span class="n">current_index</span><span class="o">+</span><span class="n">count</span>
+
+
+    <span class="n">new_node_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">current_point_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">edge_idx</span> <span class="ow">in</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">current_point_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">edge_collector</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="n">edge_idx</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">current_intersecting_points</span> <span class="o">=</span> <span class="n">point_intersection</span><span class="p">[</span><span class="n">current_point_idx</span><span class="p">]</span>
+            <span class="n">degree</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">new_node_id</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">edge_collector</span><span class="p">[</span><span class="n">position</span><span class="p">][</span><span class="n">edge_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_node_id</span>
+            <span class="k">for</span> <span class="n">intersecting_point</span> <span class="ow">in</span> <span class="n">current_intersecting_points</span><span class="p">:</span>
+                <span class="n">intersecting_point_segment_idx</span> <span class="o">=</span> <span class="n">point_segment_ids</span><span class="p">[</span><span class="n">intersecting_point</span><span class="p">]</span>
+                <span class="n">intersecting_point_type</span> <span class="o">=</span> <span class="n">point_types</span><span class="p">[</span><span class="n">intersecting_point</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">edge_collector</span><span class="p">[</span><span class="n">intersecting_point_type</span><span class="p">][</span><span class="n">intersecting_point_segment_idx</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c1">## already filled by another edge..</span>
+                    <span class="k">continue</span>
+                <span class="n">degree</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">edge_collector</span><span class="p">[</span><span class="n">intersecting_point_type</span><span class="p">][</span><span class="n">intersecting_point_segment_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_node_id</span>
+
+            <span class="n">degree_collector</span><span class="p">[</span><span class="n">new_node_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">degree</span>
+            <span class="n">geometry_collector</span><span class="p">[</span><span class="n">new_node_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_geometries</span><span class="p">[</span><span class="n">current_point_idx</span><span class="p">]</span>
+
+    <span class="n">node_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span>           <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;source_layer&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;streets&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;source_id&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span>         <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;street_node&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span>       <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">),</span>
+            <span class="c1">#&quot;nearest_street_id&quot;: pd.Series([0] * (new_node_id+1), dtype=&quot;int64&quot;),</span>
+            <span class="c1">#&quot;nearest_street_node_distance&quot;: pd.Series([None] * (new_node_id+1), dtype=&quot;object&quot;),</span>
+            <span class="s2">&quot;degree&quot;</span><span class="p">:</span>       <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">degree_collector</span><span class="p">[:</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span>     <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">geometry_collector</span><span class="p">[:</span><span class="n">new_node_id</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+
+    <span class="n">geometries</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">snapped</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">snapping_distance</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># making sure geometry is snapped as well. Theooritically, this could be done in the previous loop, an could be done slightly more eddecoenctly by not accessing node_gdf, not using append,..</span>
+    <span class="c1">#geometry_gdf[&quot;geometry&quot;].sort_index()</span>
+    <span class="k">for</span> <span class="n">segment_geometry</span><span class="p">,</span> <span class="n">segment_start_node</span><span class="p">,</span> <span class="n">segment_end_node</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(),</span> <span class="n">edge_collector</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">edge_collector</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">segment_start_node</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">segment_end_node</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="n">segment_geometry</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">new_geometry</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">LineString</span><span class="p">([</span><span class="n">start</span><span class="p">]</span><span class="o">+</span><span class="n">middle</span><span class="o">+</span><span class="p">[</span><span class="n">end</span><span class="p">])</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">segment_geometry</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="n">new_geometry</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+        <span class="n">geometries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_geometry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">difference</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">snapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">snapping_distance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">difference</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">snapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">snapping_distance</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">edge_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span>       <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">edge_count</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">geometries</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">),</span>
+            <span class="s2">&quot;length&quot;</span><span class="p">:</span>   <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span>   <span class="n">geometry_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span>     <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="s2">&quot;street&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">edge_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;parent_street_id&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">geometry_gdf</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;start&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">edge_collector</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;end&quot;</span><span class="p">:</span>      <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">edge_collector</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;snapped&quot;</span><span class="p">:</span>  <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">snapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">),</span>
+            <span class="s2">&quot;snapping_distance&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">snapping_distance</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">node_gdf</span><span class="p">,</span> <span class="n">edge_gdf</span>
+
+<span class="k">def</span> <span class="nf">_discard_redundant_edges</span><span class="p">(</span><span class="n">edge_gdf</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">):</span>
+    <span class="c1">## finding edges that share the same start and end, including those who start and end at the same node</span>
+    <span class="n">edge_stack</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;edge_id&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">edge_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">]),</span> 
+        <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]),</span>
+        <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]),</span>
+    <span class="p">})</span>
+    <span class="n">redundnt_edge_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edge_stack</span><span class="p">[</span><span class="n">edge_stack</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span><span class="s1">&#39;end&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)][</span><span class="s1">&#39;edge_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+
+    <span class="c1"># keeping the shortest of all available &#39;redundant&#39; edges</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="nb">set</span><span class="p">({})</span>
+    <span class="n">redundnt_edge_queue</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">redundnt_edge_ids</span><span class="p">)</span>
+
+
+    <span class="c1"># TODO: update degrees of end nodes of all dropped edges..</span>
+    <span class="k">while</span> <span class="n">redundnt_edge_queue</span><span class="p">:</span>
+        <span class="n">edge_idx</span> <span class="o">=</span> <span class="n">redundnt_edge_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">this_edge_start</span> <span class="o">=</span> <span class="n">edge_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">edge_idx</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">]</span>
+        <span class="n">this_edge_end</span> <span class="o">=</span> <span class="n">edge_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">edge_idx</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">this_edge_start</span> <span class="o">==</span> <span class="n">this_edge_end</span><span class="p">:</span>
+            <span class="k">continue</span> <span class="c1"># this excludes nodes that start and end at the same node from being kept</span>
+        <span class="n">this_edg_duplicates</span> <span class="o">=</span> <span class="n">edge_gdf</span><span class="p">[</span>
+            <span class="p">((</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">this_edge_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">this_edge_end</span><span class="p">))</span>
+            <span class="o">|</span> <span class="p">((</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">this_edge_start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">this_edge_end</span><span class="p">))</span>
+            <span class="p">]</span>
+        
+        <span class="n">keep</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">this_edg_duplicates</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmin</span><span class="p">())</span>
+        <span class="n">redundnt_edge_queue</span> <span class="o">=</span> <span class="n">redundnt_edge_queue</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">this_edg_duplicates</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    
+    <span class="n">remove_edges</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">redundnt_edge_ids</span><span class="p">)</span> <span class="o">-</span> <span class="n">keep</span>
+    <span class="n">unique_edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">edge_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="n">remove_edges</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">edge_gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_edges</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_tag_edges</span><span class="p">(</span><span class="n">edge_gdf</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+        <span class="n">condlist</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tolerance</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tolerance</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
+                <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">tolerance</span><span class="p">),</span>
+            <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">],</span>
+            <span class="n">edge_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">geom_type</span> <span class="o">!=</span> <span class="s2">&quot;LineString&quot;</span>
+        <span class="p">],</span>
+        <span class="n">choicelist</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;shorter than tolerance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;within 3x tolerance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cycle_edge&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bad_geometry_type&quot;</span>
+        <span class="p">],</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">edge_gdf</span><span class="p">[</span><span class="s1">&#39;tag&#39;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">duplicates</span> <span class="o">=</span> <span class="n">edge_gdf</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">edge_gdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">duplicates</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;redundant_edge&#39;</span>
+    <span class="k">return</span> <span class="n">edge_gdf</span>
+
+<span class="k">def</span> <span class="nf">_effecient_node_insertion</span><span class="p">(</span><span class="n">n_node_gdf</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">n_edge_gdf</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">source_gdf</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1">#Assigning nodes to edges using a spatial index</span>
+    <span class="c1"># TODO: CHECK IF THESE AR EPOINTS, IF POLYGONS, USE THEIR CENTRPIOD</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sindex</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">source_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#FInding out the distance along the edge for each node, and creating a point on the edge for visuals</span>
+    <span class="n">node_representative_points</span> <span class="o">=</span> <span class="n">source_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">closest_edge_geometries</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">distance_along_closest_edge</span> <span class="o">=</span> <span class="n">closest_edge_geometries</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">node_representative_points</span><span class="p">)</span>
+    <span class="n">point_on_nearest_edge</span> <span class="o">=</span> <span class="n">closest_edge_geometries</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">distance_along_closest_edge</span><span class="p">)</span>
+
+
+
+
+
+    <span class="c1"># These are essential to construct an o_adjacency and a d_adjacency lists..</span>
+    <span class="n">closest_edge_weights</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">closest_edge_lengths</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;length&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">closest_edge_starts</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">closest_edge_ends</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+
+
+    <span class="n">weight_to_start</span> <span class="o">=</span> <span class="n">closest_edge_weights</span> <span class="o">*</span> <span class="p">(</span><span class="n">distance_along_closest_edge</span><span class="o">/</span><span class="n">closest_edge_lengths</span><span class="p">)</span>
+    <span class="n">weight_to_end</span> <span class="o">=</span> <span class="n">closest_edge_weights</span> <span class="o">-</span> <span class="n">weight_to_start</span>
+
+
+    <span class="c1"># Nodes attributes</span>
+    <span class="n">node_count</span> <span class="o">=</span> <span class="n">source_gdf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start_index</span> <span class="o">=</span> <span class="n">n_node_gdf</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">node_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_index</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">start_index</span> <span class="o">+</span> <span class="n">node_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">node_source_ids</span> <span class="o">=</span> <span class="n">source_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">closest_edge_ids</span> <span class="o">=</span> <span class="n">n_edge_gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># creating a dataframe for new nodes</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="n">node_ids</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">node_weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">node_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="k">if</span> <span class="n">weight_attribute</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">source_gdf</span><span class="p">[</span><span class="n">weight_attribute</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">node_gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;source_layer&quot;</span><span class="p">:</span>     <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">layer_name</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;source_id&quot;</span><span class="p">:</span>        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">node_source_ids</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span>             <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">label</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">),</span> <span class="n">repeats</span><span class="o">=</span><span class="n">node_count</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;weight&quot;</span><span class="p">:</span>           <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">node_weight</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+            <span class="s2">&quot;nearest_edge_id&quot;</span><span class="p">:</span>  <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">closest_edge_ids</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+            <span class="s2">&quot;edge_start_node&quot;</span><span class="p">:</span>  <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">closest_edge_starts</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+            <span class="s2">&quot;weight_to_start&quot;</span><span class="p">:</span>  <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">weight_to_start</span> <span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+            <span class="s2">&quot;edge_end_node&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">closest_edge_ends</span> <span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+            <span class="s2">&quot;weight_to_end&quot;</span><span class="p">:</span>    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">weight_to_end</span> <span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+            <span class="s2">&quot;degree&quot;</span><span class="p">:</span>           <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">node_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+        <span class="n">crs</span><span class="o">=</span><span class="n">source_gdf</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+        <span class="n">geometry</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">point_on_nearest_edge</span><span class="p">,</span> <span class="n">fastpath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">node_gdf</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, City Form Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

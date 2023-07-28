@@ -1,0 +1,6 @@
+﻿madina.zonal.zonal.Network.network\_to\_layer
+=============================================
+
+.. currentmodule:: madina.zonal.zonal
+
+.. automethod:: Network.network_to_layer

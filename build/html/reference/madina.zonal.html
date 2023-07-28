@@ -1,0 +1,586 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>madina.zonal package &mdash; Madina 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="madina.una package" href="madina.una.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Madina
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">🚀 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/betweenness.html">Calculating Betweenness</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="madina.una.html">madina.una package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">madina.zonal package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal.layer">madina.zonal.layer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.layer.Layer"><code class="docutils literal notranslate"><span class="pre">Layer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.layer.Layers"><code class="docutils literal notranslate"><span class="pre">Layers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.layer.Layers.add"><code class="docutils literal notranslate"><span class="pre">Layers.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.layer.Layers.get_layer_at_pos"><code class="docutils literal notranslate"><span class="pre">Layers.get_layer_at_pos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.layer.Layers.insert_at"><code class="docutils literal notranslate"><span class="pre">Layers.insert_at()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.layer.Layers.pos_at_label"><code class="docutils literal notranslate"><span class="pre">Layers.pos_at_label()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal.network">madina.zonal.network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.network.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.create_graph"><code class="docutils literal notranslate"><span class="pre">Network.create_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.fuse_degree_2_nodes"><code class="docutils literal notranslate"><span class="pre">Network.fuse_degree_2_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.get_od_subgraph"><code class="docutils literal notranslate"><span class="pre">Network.get_od_subgraph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.network_to_layer"><code class="docutils literal notranslate"><span class="pre">Network.network_to_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.scan_for_intersections"><code class="docutils literal notranslate"><span class="pre">Network.scan_for_intersections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.set_node_value"><code class="docutils literal notranslate"><span class="pre">Network.set_node_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.turn_o_scope"><code class="docutils literal notranslate"><span class="pre">Network.turn_o_scope()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.update_light_graph"><code class="docutils literal notranslate"><span class="pre">Network.update_light_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.network.Network.visualize_graph"><code class="docutils literal notranslate"><span class="pre">Network.visualize_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal.network_utils">madina.zonal.network_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.network_utils.GeoPandaExtractor"><code class="docutils literal notranslate"><span class="pre">GeoPandaExtractor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal.zonal">madina.zonal.zonal module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.zonal.Zonal"><code class="docutils literal notranslate"><span class="pre">Zonal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.DEFAULT_COLORS"><code class="docutils literal notranslate"><span class="pre">Zonal.DEFAULT_COLORS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.DEFAULT_GEOGRAPHIC_CRS"><code class="docutils literal notranslate"><span class="pre">Zonal.DEFAULT_GEOGRAPHIC_CRS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.DEFAULT_PROJECTED_CRS"><code class="docutils literal notranslate"><span class="pre">Zonal.DEFAULT_PROJECTED_CRS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.create_graph"><code class="docutils literal notranslate"><span class="pre">Zonal.create_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.create_street_network"><code class="docutils literal notranslate"><span class="pre">Zonal.create_street_network()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.describe"><code class="docutils literal notranslate"><span class="pre">Zonal.describe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.insert_node"><code class="docutils literal notranslate"><span class="pre">Zonal.insert_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#madina.zonal.zonal.Zonal.load_layer"><code class="docutils literal notranslate"><span class="pre">Zonal.load_layer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal.zonal_utils">madina.zonal.zonal_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#madina.zonal.zonal_utils.color_gdf"><code class="docutils literal notranslate"><span class="pre">color_gdf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-madina.zonal">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Madina</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>madina.zonal package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/madina.zonal.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="madina-zonal-package">
+<h1>madina.zonal package<a class="headerlink" href="#madina-zonal-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-madina.zonal.layer">
+<span id="madina-zonal-layer-module"></span><h2>madina.zonal.layer module<a class="headerlink" href="#module-madina.zonal.layer" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">madina.zonal.layer.</span></span><span class="sig-name descname"><span class="pre">Layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a <cite>Zonal</cite> layer with name <cite>label</cite>, source <cite>file_path</cite> and crs <cite>original_crs</cite>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">madina.zonal.layer.</span></span><span class="sig-name descname"><span class="pre">Layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a collection of Zonal layers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layers.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layers.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layers.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new layer <cite>layer</cite> to the top of the stack.
+If <cite>pos</cite> is specified, ignores the <cite>before</cite>, <cite>after</cite> and <cite>last</cite> parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layers.get_layer_at_pos">
+<span class="sig-name descname"><span class="pre">get_layer_at_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layers.get_layer_at_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layers.get_layer_at_pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layers.insert_at">
+<span class="sig-name descname"><span class="pre">insert_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layers.insert_at"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layers.insert_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts new layer <cite>layer</cite> into the specified position <cite>pos</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError if a layer with the same label is already in the Zonal</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.layer.Layers.pos_at_label">
+<span class="sig-name descname"><span class="pre">pos_at_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/layer.html#Layers.pos_at_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.layer.Layers.pos_at_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-madina.zonal.network">
+<span id="madina-zonal-network-module"></span><h2>madina.zonal.network module<a class="headerlink" href="#module-madina.zonal.network" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="madina.zonal.network.Network">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">madina.zonal.network.</span></span><span class="sig-name descname"><span class="pre">Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn_threshold_degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn_penalty_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A road network with nodes <cite>nodes</cite> and edges <cite>edges</cite> weighted with factor <cite>weight_attribute</cite>,
+projected onto the <cite>projected_crs</cite> coordinate system.</p>
+<p>Internal class, meant to represent a network within the Zonal object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.create_graph">
+<span class="sig-name descname"><span class="pre">create_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">light_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">od_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.create_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.create_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the corresponding graphs in the Network object based on the current nodes and edges
+<cite>light_graph</cite> - contains only network nodes and edges
+<cite>d_graph</cite> - contains all destination nodes
+<cite>od_graph</cite> - contains all origin and destination nodes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>light_graph</strong> – if true, create <cite>self.light_graph</cite></p></li>
+<li><p><strong>d_graph</strong> – if true, create <cite>self.d_graph</cite></p></li>
+<li><p><strong>od_graph</strong> – if true, create <cite>self.od_graph</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.fuse_degree_2_nodes">
+<span class="sig-name descname"><span class="pre">fuse_degree_2_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance_angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.fuse_degree_2_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.fuse_degree_2_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.get_od_subgraph">
+<span class="sig-name descname"><span class="pre">get_od_subgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.get_od_subgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.get_od_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a subgraph of the city network <cite>self</cite> from all nodes &lt;= <cite>distance</cite> from the node at <cite>origin_idx</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A smaller network graph (?)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.network_to_layer">
+<span class="sig-name descname"><span class="pre">network_to_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.network_to_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.network_to_layer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.scan_for_intersections">
+<span class="sig-name descname"><span class="pre">scan_for_intersections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_snapping_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.scan_for_intersections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.scan_for_intersections" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.set_node_value">
+<span class="sig-name descname"><span class="pre">set_node_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.set_node_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.set_node_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the node at (<cite>idx</cite>, <cite>label</cite>) value in the network to <cite>new_value</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.turn_o_scope">
+<span class="sig-name descname"><span class="pre">turn_o_scope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detour_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.turn_o_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.turn_o_scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a modified Dijkstra algorithm from the <cite>origin_idx</cite>, with a <cite>turn_penalty</cite> for
+making a turn along the path. Bounds the search by <cite>search_radius</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of destination indices, origin scope, and paths from origin to destination</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.update_light_graph">
+<span class="sig-name descname"><span class="pre">update_light_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.update_light_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.update_light_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the given graph object by adding nodes to and removing nodes from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> – The given networkx Graph object to be edited</p></li>
+<li><p><strong>add_nodes</strong> – a list of nodes to be added</p></li>
+<li><p><strong>remove_nodes</strong> – a list of nodes to be removed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.network.Network.visualize_graph">
+<span class="sig-name descname"><span class="pre">visualize_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network.html#Network.visualize_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network.Network.visualize_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an HTML map of the <cite>zonal</cite> object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-madina.zonal.network_utils">
+<span id="madina-zonal-network-utils-module"></span><h2>madina.zonal.network_utils module<a class="headerlink" href="#module-madina.zonal.network_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="madina.zonal.network_utils.GeoPandaExtractor">
+<span class="sig-prename descclassname"><span class="pre">madina.zonal.network_utils.</span></span><span class="sig-name descname"><span class="pre">GeoPandaExtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poly_line_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/network_utils.html#GeoPandaExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.network_utils.GeoPandaExtractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-madina.zonal.zonal">
+<span id="madina-zonal-zonal-module"></span><h2>madina.zonal.zonal module<a class="headerlink" href="#module-madina.zonal.zonal" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">madina.zonal.zonal.</span></span><span class="sig-name descname"><span class="pre">Zonal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoSeries</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for geographic data in madina composed of multiple geographic layers.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.DEFAULT_COLORS">
+<span class="sig-name descname"><span class="pre">DEFAULT_COLORS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'blocks':</span> <span class="pre">[100,</span> <span class="pre">100,</span> <span class="pre">100],</span> <span class="pre">'network_edges':</span> <span class="pre">{'__attribute_name__':</span> <span class="pre">'type',</span> <span class="pre">'__other__':</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0],</span> <span class="pre">'project_line':</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">150],</span> <span class="pre">'street':</span> <span class="pre">[0,</span> <span class="pre">150,</span> <span class="pre">150]},</span> <span class="pre">'network_nodes':</span> <span class="pre">{'__attribute_name__':</span> <span class="pre">'type',</span> <span class="pre">'__other__':</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0],</span> <span class="pre">'destination':</span> <span class="pre">[255,</span> <span class="pre">0,</span> <span class="pre">0],</span> <span class="pre">'origin':</span> <span class="pre">[0,</span> <span class="pre">255,</span> <span class="pre">0],</span> <span class="pre">'project_node':</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">255],</span> <span class="pre">'street_node':</span> <span class="pre">[0,</span> <span class="pre">255,</span> <span class="pre">255]},</span> <span class="pre">'parcels':</span> <span class="pre">[50,</span> <span class="pre">50,</span> <span class="pre">50],</span> <span class="pre">'streets':</span> <span class="pre">[150,</span> <span class="pre">150,</span> <span class="pre">150]}</span></em><a class="headerlink" href="#madina.zonal.zonal.Zonal.DEFAULT_COLORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.DEFAULT_GEOGRAPHIC_CRS">
+<span class="sig-name descname"><span class="pre">DEFAULT_GEOGRAPHIC_CRS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'EPSG:3857'</span></em><a class="headerlink" href="#madina.zonal.zonal.Zonal.DEFAULT_GEOGRAPHIC_CRS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.DEFAULT_PROJECTED_CRS">
+<span class="sig-name descname"><span class="pre">DEFAULT_PROJECTED_CRS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'EPSG:4326'</span></em><a class="headerlink" href="#madina.zonal.zonal.Zonal.DEFAULT_PROJECTED_CRS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.create_graph">
+<span class="sig-name descname"><span class="pre">create_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">light_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">od_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal.create_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal.create_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the creation of three kinds of graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edges</strong> (<em>light_graph - contains only network nodes and</em>) – </p></li>
+<li><p><strong>origin</strong> (<em>od_graph - contains all</em>) – </p></li>
+<li><p><strong>destination</strong> – </p></li>
+<li><p><strong>network</strong> – </p></li>
+<li><p><strong>nodes</strong> (<em>etc.</em>) – </p></li>
+<li><p><strong>intersectionsa</strong> (<em>d_graph - contains all destination nodes and network</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.create_street_network">
+<span class="sig-name descname"><span class="pre">create_street_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'streets'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_snapping_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prepare_geometry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discard_redundant_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn_threshold_degree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn_penalty_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal.create_street_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal.create_street_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a network from the given layer with the given arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_layer</strong> (<em>str</em><em>, </em><em>defaults to &quot;streets&quot;</em>) – The name of the layer used to create the street network. Must be a layer composed of
+lines that has been already loaded into the Zonal object.</p></li>
+<li><p><strong>weight_attribute</strong> (<em>str</em><em>, </em><em>defaults to &quot;None&quot;</em>) – The attribute name of the layer that will be used as the edge weight in the created
+network. If None, the geometric length of the edges will be used</p></li>
+<li><p><strong>node_snapping_tolerance</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>defaults to 0</em>) – If greater than 0, snaps nodes that are closer than <code class="docutils literal notranslate"><span class="pre">node_snapping_tolerance</span></code> together</p></li>
+<li><p><strong>prepare_geometry</strong> (<em>bool</em><em>, </em><em>defaults to False</em>) – If True, runs simple fixes to the geometry of the sourcelayer</p></li>
+<li><p><strong>tag_edges</strong> (<em>bool</em><em>, </em><em>defaults to False</em>) – If True, attach tags to edges that are problematic</p></li>
+<li><p><strong>discard_redundant_edges</strong> (<em>bool</em><em>, </em><em>defaults to False</em>) – If True, delete repetitive edges connecting the same nodes, preserving the shortest one</p></li>
+<li><p><strong>turn_threshold_degree</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>defaults to 45</em>) – The threshold of a turn to be considered penalizable</p></li>
+<li><p><strong>turn_penalty_amount</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>defaults to 30</em>) – The penalty added to a turn</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Madina.zonal.zonal</span> <span class="kn">import</span> <span class="n">Zonal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span> <span class="o">=</span> <span class="n">Zonal</span><span class="p">(</span><span class="n">projected_crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span><span class="o">.</span><span class="n">load_layer</span><span class="p">(</span><span class="s2">&quot;pedestrian_network&quot;</span><span class="p">,</span> <span class="s2">&quot;../data/my_city_pedestrian_network.geojson&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span><span class="o">.</span><span class="n">create_street_network</span><span class="p">(</span>
+<span class="go">        source_layer=&quot;pedestrian_network&quot;,</span>
+<span class="go">        node_snapping_tolerance=1.5</span>
+<span class="go">        discard_redundant_edges=True,</span>
+<span class="go">        turn_threshold_degree=60,</span>
+<span class="go">        turn_penalty_amount=42.3</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.describe">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal.describe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints information about the Zonal Object</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Madina.zonal.zonal</span> <span class="kn">import</span> <span class="n">Zonal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span> <span class="o">=</span> <span class="n">Zonal</span><span class="p">(</span><span class="n">projected_crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">No layers yet, load a layer using &#39;load_layer(layer_name, file_path)&#39;</span>
+<span class="go">No scope yet. If needed (When your zonal_layers contain data that is outside of your analysis scope, setting a scope speeds up the analysis), set a scope using &#39;set_scope(scope)&#39;</span>
+<span class="go">No center yet, add a layer or set a scope to define a center</span>
+<span class="go">No network graph yet. First, insert a layer that contains network segments (streets, sidewalks, ..) and call create_street_network(layer_name, weight_attribute=None)</span>
+<span class="go">Then, insert origins and destinations using &#39;insert_nodes(label, layer_name, weight_attribute)&#39;</span>
+<span class="go">Finally, when done, create a network by calling &#39;create_street_network()&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.insert_node">
+<span class="sig-name descname"><span class="pre">insert_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'origin'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal.insert_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal.insert_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert nodes from a given layer to the network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_name</strong> (<em>str</em>) – The name of the layer from which nodes will be inserted</p></li>
+<li><p><strong>label</strong> (<em>str</em><em>, </em><em>defaults to &quot;origin&quot;</em>) – The label of the inserted nodes in the network</p></li>
+<li><p><strong>weight_attribute</strong> (<em>str</em><em>, </em><em>defaults to None</em>) – The attribute in the layer <code class="docutils literal notranslate"><span class="pre">layer_name</span></code> that will be used as the weight of the
+inserted nodes. If None, all weights will be assigned as 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="madina.zonal.zonal.Zonal.load_layer">
+<span class="sig-name descname"><span class="pre">load_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_out_of_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/madina/zonal/zonal.html#Zonal.load_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal.Zonal.load_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a new geographic layer into the Zonal object from local files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_name</strong> (<em>str</em>) – The name of the new layer</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – The file path to the file storing the geographic layer</p></li>
+<li><p><strong>allow_out_of_scope</strong> (bool, <em>optional</em>, defaults to False) – If False, clips the layer to the scope of the Zonal object</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Madina.zonal.zonal</span> <span class="kn">import</span> <span class="n">Zonal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span> <span class="o">=</span> <span class="n">Zonal</span><span class="p">(</span><span class="n">projected_crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">city</span><span class="o">.</span><span class="n">load_layer</span><span class="p">(</span><span class="s2">&quot;pedestrian_network&quot;</span><span class="p">,</span> <span class="s2">&quot;../data/my_city_pedestrian_network.geojson&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>Pos, first, before, and after that were used for visualization need documentation.
+Leave them blank for now until visualization is implemented.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-madina.zonal.zonal_utils">
+<span id="madina-zonal-zonal-utils-module"></span><h2>madina.zonal.zonal_utils module<a class="headerlink" href="#module-madina.zonal.zonal_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="madina.zonal.zonal_utils.color_gdf">
+<span class="sig-prename descclassname"><span class="pre">madina.zonal.zonal_utils.</span></span><span class="sig-name descname"><span class="pre">color_gdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_scheme</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/madina/zonal/zonal_utils.html#color_gdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#madina.zonal.zonal_utils.color_gdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of the nodes in a <cite>gdf</cite>, visualizing the attribute/column name to be
+colored by using <cite>by_attribute</cite>.</p>
+<p>Available schemes are: <cite>single</cite>, <cite>categorical</cite> and <cite>gradient</cite>.</p>
+<blockquote>
+<div><dl class="simple">
+<dt><cite>color_scheme</cite>: if color method is single color, expects one color. if categorical,</dt><dd><p>expects nothing and would give automatic assignment, or a dict {“val’: [0,0,0]}. if color_method is gradient,
+expects nothing for a default color map, or a color map name</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-madina.zonal">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-madina.zonal" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="madina.una.html" class="btn btn-neutral float-left" title="madina.una package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, City Form Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

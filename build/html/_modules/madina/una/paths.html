@@ -1,0 +1,692 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>madina.una.paths &mdash; Madina 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Madina
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">🚀 Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/betweenness.html">Calculating Betweenness</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">📚 API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/madina.una.html">madina.una package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/madina.zonal.html">madina.zonal package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Madina</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>madina.una.paths</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for madina.una.paths</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
+
+<span class="kn">import</span> <span class="nn">shapely</span>
+<span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">geo</span>
+<span class="kn">from</span> <span class="nn">shapely.ops</span> <span class="kn">import</span> <span class="n">unary_union</span>
+
+<span class="kn">from</span> <span class="nn">madina.zonal.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">madina.una.una_utils</span> <span class="kn">import</span> \
+    <span class="n">turn_o_scope</span><span class="p">,</span> \
+    <span class="n">turn_penalty_value</span><span class="p">,</span> \
+    <span class="n">angle_deviation_between_two_lines</span>
+
+
+<div class="viewcode-block" id="path_generator"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.path_generator">[docs]</a><span class="k">def</span> <span class="nf">path_generator</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="o">=</span><span class="mf">1.15</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate all possible paths, their weights, and the destination nodes that can be</span>
+<span class="sd">    reached from the given origin.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Adding the origin to the destination graph</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">d_graph</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+
+    <span class="n">o_graph</span><span class="p">,</span> <span class="n">d_idxs</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">scope_nodes</span> <span class="o">=</span> <span class="n">get_od_subgraph</span><span class="p">(</span>
+        <span class="n">network</span><span class="p">,</span>
+        <span class="n">o_idx</span><span class="p">,</span>
+        <span class="n">search_radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">,</span>
+        <span class="n">detour_ratio</span><span class="o">=</span><span class="n">detour_ratio</span><span class="p">,</span>
+        <span class="n">output_map</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">graph_type</span><span class="o">=</span><span class="s2">&quot;trail_blazer&quot;</span><span class="p">,</span>
+        <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">,</span>
+        <span class="n">o_graph</span><span class="o">=</span><span class="n">graph</span>
+    <span class="p">)</span>
+
+
+    <span class="n">d_allowed_distances</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">d_allowed_distances</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_idxs</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">detour_ratio</span>
+
+    <span class="n">paths</span><span class="p">,</span> <span class="n">distances</span> <span class="o">=</span> <span class="n">bfs_paths_many_targets_iterative</span><span class="p">(</span><span class="n">network</span><span class="p">,</span>
+                                                         <span class="n">graph</span><span class="p">,</span>
+                                                         <span class="n">o_idx</span><span class="p">,</span>
+                                                         <span class="n">d_allowed_distances</span><span class="p">,</span>
+                                                         <span class="n">distance_matrix</span><span class="o">=</span><span class="n">distance_matrix</span><span class="p">,</span>
+                                                         <span class="n">od_scope</span><span class="o">=</span><span class="n">scope_nodes</span><span class="p">,</span>
+                                                         <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span>
+                                                         <span class="p">)</span>
+    
+
+    <span class="c1"># Removing the origin from the destination graph to restore it</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">remove_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">paths</span><span class="p">,</span> <span class="n">distances</span><span class="p">,</span> <span class="n">d_idxs</span></div>
+
+
+<div class="viewcode-block" id="get_od_subgraph"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.get_od_subgraph">[docs]</a><span class="k">def</span> <span class="nf">get_od_subgraph</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="o">=</span><span class="mf">1.15</span><span class="p">,</span>
+                      <span class="n">output_map</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">graph_type</span><span class="o">=</span><span class="s2">&quot;geometric&quot;</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">o_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">o_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># In case the origin graph (one origin + all destinations) is not created</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">d_graph</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">d_graph</span><span class="o">.</span><span class="n">graph</span><span class="p">[</span><span class="s2">&quot;added_nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">o_graph</span>
+
+    <span class="k">if</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s2">&quot;geometric&quot;</span><span class="p">:</span>
+        <span class="n">scope_nodes</span> <span class="o">=</span> <span class="n">geometric_scope</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">o_graph</span><span class="o">=</span><span class="n">graph</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s2">&quot;network&quot;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s2">&quot;double_sided_dijkstra&quot;</span><span class="p">:</span>
+        <span class="n">scope_nodes</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span> <span class="o">=</span> <span class="n">explore_exploit_graph</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span>
+                                                                     <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">graph_type</span> <span class="o">==</span> <span class="s2">&quot;trail_blazer&quot;</span><span class="p">:</span>
+        <span class="c1"># scope_nodes, distance_matrix, d_idxs = bfs_subgraph_generation(self, o_idx, search_radius, detour_ratio,</span>
+        <span class="c1">#                                                               turn_penalty=turn_penalty, o_graph=graph)</span>
+        <span class="n">scope_nodes</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span> <span class="o">=</span> <span class="n">bfs_subgraph_generation</span><span class="p">(</span><span class="n">network</span><span class="p">,</span>
+                                                                       <span class="n">o_idx</span><span class="p">,</span>
+                                                                       <span class="n">search_radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">,</span>
+                                                                       <span class="n">detour_ratio</span><span class="o">=</span><span class="n">detour_ratio</span><span class="p">,</span>
+                                                                       <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">,</span>
+                                                                       <span class="n">o_graph</span><span class="o">=</span><span class="n">graph</span>
+                                                                       <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">graph</span><span class="p">,</span> <span class="n">d_idxs</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">scope_nodes</span></div>
+
+<div class="viewcode-block" id="geometric_scope"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.geometric_scope">[docs]</a><span class="k">def</span> <span class="nf">geometric_scope</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">o_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">node_gdf</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span>
+    <span class="n">scopes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">d_idxs</span><span class="p">,</span> <span class="n">o_scope</span><span class="p">,</span> <span class="n">o_scope_paths</span> <span class="o">=</span> <span class="n">turn_o_scope</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">,</span>
+                                                  <span class="n">o_graph</span><span class="o">=</span><span class="n">o_graph</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">od_shortest_distance</span> <span class="o">=</span> <span class="n">d_idxs</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span>
+        <span class="c1"># Get scope: intersection of o_buffer and d_buffer</span>
+        <span class="n">od_geometric_distance</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">o_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">])</span>
+        <span class="n">o_scope</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">o_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">buffer</span><span class="p">((</span><span class="n">detour_ratio</span> <span class="o">*</span> <span class="n">od_shortest_distance</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">d_scope</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">buffer</span><span class="p">((</span><span class="n">detour_ratio</span> <span class="o">*</span> <span class="n">od_shortest_distance</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">intersection_points</span> <span class="o">=</span> <span class="n">o_scope</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">d_scope</span><span class="o">.</span><span class="n">exterior</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection_points</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">scope</span> <span class="o">=</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">buffer</span><span class="p">((</span><span class="n">detour_ratio</span> <span class="o">*</span> <span class="n">od_shortest_distance</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mid_point</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">LineString</span><span class="p">([</span><span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">o_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]])</span><span class="o">.</span><span class="n">centroid</span>
+            <span class="n">major_axis</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">affinity</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+                <span class="n">geo</span><span class="o">.</span><span class="n">LineString</span><span class="p">([</span><span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">o_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">node_gdf</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d_idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]])</span>
+                <span class="p">,</span> <span class="n">xfact</span><span class="o">=</span><span class="p">(</span><span class="n">detour_ratio</span> <span class="o">*</span> <span class="n">od_shortest_distance</span> <span class="o">/</span> <span class="n">od_geometric_distance</span><span class="p">),</span>
+                <span class="n">yfact</span><span class="o">=</span><span class="p">(</span><span class="n">detour_ratio</span> <span class="o">*</span> <span class="n">od_shortest_distance</span> <span class="o">/</span> <span class="n">od_geometric_distance</span><span class="p">),</span> <span class="n">zfact</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;center&#39;</span>
+            <span class="p">)</span>
+
+            <span class="n">minor_axis</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">LineString</span><span class="p">([</span><span class="n">intersection_points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">intersection_points</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">center_unit_circle</span> <span class="o">=</span> <span class="n">mid_point</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">unaligned_ellipse</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">affinity</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+                <span class="n">center_unit_circle</span><span class="p">,</span>
+                <span class="n">xfact</span><span class="o">=</span><span class="n">major_axis</span><span class="o">.</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">yfact</span><span class="o">=</span><span class="n">minor_axis</span><span class="o">.</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="p">)</span>
+
+            <span class="n">point_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">major_axis</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">major_axis</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">geo</span><span class="o">.</span><span class="n">Point</span><span class="p">((</span><span class="n">major_axis</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">major_axis</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])),</span>
+            <span class="p">]</span>
+
+            <span class="n">alignment_angle</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">-</span> <span class="n">angle_deviation_between_two_lines</span><span class="p">(</span>
+                <span class="n">point_list</span><span class="p">,</span>
+                <span class="n">raw_angle</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+            <span class="n">aligned_ellipse</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">affinity</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">unaligned_ellipse</span><span class="p">,</span> <span class="n">alignment_angle</span><span class="p">)</span>
+            <span class="n">scope</span> <span class="o">=</span> <span class="n">aligned_ellipse</span>
+
+        <span class="n">scopes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batched</span><span class="p">:</span>
+        <span class="n">scopes</span> <span class="o">=</span> <span class="n">unary_union</span><span class="p">(</span><span class="n">scopes</span><span class="p">)</span>
+        <span class="n">scope_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_gdf</span><span class="p">[</span><span class="n">node_gdf</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">scopes</span><span class="p">)]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scope_nodes</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scope_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">d_idx</span><span class="p">,</span> <span class="n">scope</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">d_idxs</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">scopes</span><span class="p">):</span>
+            <span class="n">scope_nodes</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_gdf</span><span class="p">[</span><span class="n">node_gdf</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">scope</span><span class="p">)]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scope_nodes</span></div>
+
+
+<div class="viewcode-block" id="explore_exploit_graph"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.explore_exploit_graph">[docs]</a><span class="k">def</span> <span class="nf">explore_exploit_graph</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">od_scope</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">d_idxs</span><span class="p">,</span> <span class="n">o_scope</span><span class="p">,</span> <span class="n">o_scope_paths</span> <span class="o">=</span> <span class="n">turn_o_scope</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">)</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">d_graph</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_idxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">remove_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">od_scope</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span>
+
+    <span class="c1">## start ellipse search from all nodes.</span>
+    <span class="c1">## look at all d_idxs. find thier neighbors, insert into queue.</span>
+    <span class="c1"># count = 0</span>
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="p">:</span>
+        <span class="n">best_weight_node_queue</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">heappush</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_idx</span><span class="p">))</span>
+        <span class="n">d_scope</span> <span class="o">=</span> <span class="p">{</span><span class="n">d_idx</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="k">while</span> <span class="n">best_weight_node_queue</span><span class="p">:</span>
+            <span class="n">weight</span><span class="p">,</span> <span class="n">node</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)):</span>
+                <span class="c1"># termination conditions...</span>
+                <span class="n">spent_weight</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[(</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+
+                <span class="c1"># the given graph have 2 neighbors for origins and destinations.</span>
+                <span class="c1"># if a node has only one neighbor, its a deadend.</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># print(f&quot;{node = }\tSIngle neighbor termination&quot;)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">o_scope</span><span class="p">:</span>
+                    <span class="c1"># print(f&quot;{node = }\tOut of O Scope termination&quot;)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">+</span> <span class="n">o_scope</span><span class="p">[</span><span class="n">neighbor</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">o_scope</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">detour_ratio</span><span class="p">:</span>
+                    <span class="c1"># print(f&quot;{node = }\t{spent_weight = }\t{weight = }\t{o_scope[d_idx] = }</span>
+                    <span class="c1"># \t{o_scope[d_idx] * detour_ratio = }network distance termination termination&quot;)</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># keep track of discovered nodes and their shortest distance.</span>
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">d_scope</span><span class="p">:</span>  <span class="c1"># equivalent to if in seen</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">d_scope</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]:</span>
+                        <span class="n">d_scope</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># print(f&quot;{node = }\t{d_scope = }\tAlready found shorter distance termination&quot;)</span>
+                        <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">d_scope</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span>
+                    <span class="c1"># print(f&quot;{neighbor = } added to scope&quot;)</span>
+
+                <span class="c1"># launching new search</span>
+
+                <span class="n">heappush</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">,</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">))</span>
+        <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_scope</span>
+        <span class="n">od_scope</span> <span class="o">=</span> <span class="n">od_scope</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">d_scope</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    WHat do we want to achieve?</span>
+<span class="sd">        @ Starting from a certain origin node</span>
+<span class="sd">        @ Find all destinations that are within &quot;search radius weight&quot;. We need to kmow their minimum distance.</span>
+<span class="sd">        @ Once all destinations are found:</span>
+<span class="sd">            @ from each destination, we want to find all edges that connects back to &quot;Origin&quot;, that</span>
+<span class="sd">                are within a &quot;detour ratio from the shortest path&quot; from O to D. to build a search space.</span>
+<span class="sd">            @ for each node found in the search space, we need to know all destinations</span>
+<span class="sd">                it connects to, and the minimum distance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span>
+        <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+        <span class="n">remove_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">od_scope</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span></div>
+
+
+<div class="viewcode-block" id="bfs_subgraph_generation"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.bfs_subgraph_generation">[docs]</a><span class="k">def</span> <span class="nf">bfs_subgraph_generation</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="o">=</span><span class="mf">1.15</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">o_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Suggested Pseudocode:</span>
+<span class="sd">    @ run O dijkstra fo find all dests and paths just like before</span>
+<span class="sd">    @ for all dests, and all neighbors to dijkstra queue (dist, d_idx, current_node)</span>
+<span class="sd">        @ pop node from queue</span>
+<span class="sd">        @ if node is not in dist_matrix[d_idx]:</span>
+<span class="sd">            DO all network termination checks, single neighbor term, ...</span>
+<span class="sd">            @ add it, and add all nodes in shortest path from the origin backwards to maintain</span>
+<span class="sd">            weight dist_matrix[d_idx][node] = current weight+accumilated backwards weight</span>
+<span class="sd">            @ to avoid traversing backwards multiple time, just mark the &quot;trailhead&quot; by each destinations that</span>
+<span class="sd">             gets to it, and add each destination as key in the dist_matrix[d_idx][node]</span>
+<span class="sd">            @ keep a list of trailheads for later update..</span>
+<span class="sd">        @ if node is already in and current weight is better:</span>
+<span class="sd">            @ for all nodes on o_shortest_path, update dist_matrix[node][d_idx] = current weight+accumilated</span>
+<span class="sd">            backwards weight</span>
+<span class="sd">        # if already in and weight is worse, continue.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># TODO: should we only run destination search to half radius and use origin&#39;s shortest paths to complete the rest?</span>
+    <span class="c1"># TODO: should we use origin shortest paths to quickly terminate search from dest?traverse path to update</span>
+    <span class="c1">#  distance from destination to the dist_matrix</span>
+    <span class="c1"># TODO: should we batch search for all dests? it would be hard as we only keep track of one weight? maybe</span>
+    <span class="c1">#  keep track of multiple weights one for each source.</span>
+    <span class="c1"># TODO: should we use shortest_path_to_o while we search? probably yes.</span>
+    <span class="n">od_scope</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">trailheads</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">o_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># d_idxs, o_scope, o_scope_paths = get_o_scope(self, graph, o_idx, search_radius, detour_ratio, get_paths=True)</span>
+        <span class="n">d_idxs</span><span class="p">,</span> <span class="n">o_scope</span><span class="p">,</span> <span class="n">o_scope_paths</span> <span class="o">=</span> <span class="n">turn_o_scope</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span>
+                                                      <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">d_graph</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">add_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">d_idxs</span><span class="p">,</span> <span class="n">o_scope</span><span class="p">,</span> <span class="n">o_scope_paths</span> <span class="o">=</span> <span class="n">turn_o_scope</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span class="n">detour_ratio</span><span class="p">,</span>
+                                                      <span class="n">turn_penalty</span><span class="o">=</span><span class="n">turn_penalty</span><span class="p">,</span> <span class="n">o_graph</span><span class="o">=</span><span class="n">o_graph</span><span class="p">)</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">o_graph</span>
+
+    <span class="c1"># visualize_graph(self, graph)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d_idxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">o_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span>
+                <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+                <span class="n">remove_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">od_scope</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span>
+
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    queue_counter = 0</span>
+<span class="sd">    queue_neighbor_counter = 0</span>
+<span class="sd">    current_is_better = 0</span>
+<span class="sd">    found_better_updates = 0</span>
+<span class="sd">    found_new_node = 0</span>
+<span class="sd">    new_node_is_deadend = 0</span>
+<span class="sd">    new_node_out_of_scope = 0</span>
+<span class="sd">    new_node_cant_reach_o = 0</span>
+<span class="sd">    new_node_passed_filters = 0</span>
+<span class="sd">    #global node_is_new_trailhead</span>
+<span class="sd">    node_is_new_trailhead = 0</span>
+<span class="sd">    new_node_is_o_idx = 0</span>
+<span class="sd">    max_queue_length = 0</span>
+<span class="sd">    #global trailblazer_early_termination</span>
+<span class="sd">    trailblazer_early_termination = 0</span>
+<span class="sd">    better_update_difference_total = 0</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">impossible_high_cost</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">d_idxs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">trailblazer</span><span class="p">(</span><span class="n">d_idx</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="c1"># nonlocal node_is_new_trailhead, trailblazer_early_termination</span>
+        <span class="c1"># node_is_new_trailhead += 1</span>
+        <span class="k">for</span> <span class="n">trailblazer_node</span> <span class="ow">in</span> <span class="n">o_scope_paths</span><span class="p">[</span><span class="n">source</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">trailblazer_node</span> <span class="ow">in</span> <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]:</span>
+                <span class="c1"># trailblazer_early_termination += 1</span>
+                <span class="k">break</span>
+            <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">][</span><span class="n">trailblazer_node</span><span class="p">]</span> <span class="o">=</span> <span class="n">impossible_high_cost</span>
+
+    <span class="n">best_weight_node_queue</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># TODO: using a hashable priority queue might be something to try... as it offer a fast way to update a</span>
+    <span class="c1">#  value which might make trailblazing work effeciently with distances than just passing screening.</span>
+
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="p">:</span>
+        <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">d_idx</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">trailblazer</span><span class="p">(</span><span class="n">d_idx</span><span class="p">,</span> <span class="n">d_idx</span><span class="p">)</span>
+        <span class="n">heappush</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_idx</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="n">best_weight_node_queue</span><span class="p">:</span>
+            <span class="c1"># if len(best_weight_node_queue) &gt; max_queue_length:</span>
+            <span class="c1">#    max_queue_length = len(best_weight_node_queue)</span>
+
+            <span class="c1"># queue_counter += 1</span>
+            <span class="n">weight</span><span class="p">,</span> <span class="n">node</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">)</span>
+            <span class="c1"># for neighbor in list(graph.neighbors(node)):</span>
+            <span class="c1"># if o_graph is None:</span>
+            <span class="c1">#    scope_neighbors = list(graph.neighbors(node))</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#    scope_neighbors = [neighbor for neighbor in list(graph.neighbors(node)) if neighbor in od_scope]</span>
+            <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)):</span>
+                <span class="c1"># queue_neighbor_counter += 1</span>
+                <span class="n">spent_weight</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[(</span><span class="n">node</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]:</span>  <span class="c1"># equivalent to if in seen</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]:</span>
+                        <span class="c1"># current_is_better += 1</span>
+                        <span class="c1"># print(f&quot;{node = }\t{d_scope = }\tAlready found shorter distance termination&quot;)</span>
+                        <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># better_update_difference_total += distance_matrix[d_idx][neighbor] - (spent_weight + weight)</span>
+                        <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span>
+                        <span class="c1"># found_better_updates += 1</span>
+                        <span class="c1"># TODO: Here, we also don&#39;t need to recheck. just insert to the heap again..</span>
+                        <span class="n">heappush</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">,</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">))</span>
+                        <span class="k">continue</span>
+                <span class="c1"># found_new_node += 1</span>
+
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">o_scope</span><span class="p">:</span>
+                    <span class="c1"># print(f&quot;{node = }\tOut of O Scope termination&quot;)</span>
+                    <span class="c1"># new_node_out_of_scope += 1</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span> <span class="o">+</span> <span class="n">o_scope</span><span class="p">[</span><span class="n">neighbor</span><span class="p">])</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">o_scope</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">detour_ratio</span><span class="p">):</span>
+                    <span class="c1"># new_node_cant_reach_o += 1</span>
+                    <span class="c1"># print(f&quot;{node = }\t{spent_weight = }\t{weight = }</span>
+                    <span class="c1"># \t{o_scope[d_idx] = }\t{o_scope[d_idx]</span>
+                    <span class="c1"># * detour_ratio = }network distance termination termination&quot;)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># print(f&quot;{node = }\tSIngle neighbor termination&quot;)</span>
+                    <span class="c1"># new_node_is_deadend += 1</span>
+                    <span class="k">continue</span>
+                <span class="c1"># new_node_passed_filters += 1</span>
+                <span class="c1"># TODO: Mark as trailhead, and also insert o_shortest route elements into distance_matrix[d_idx]</span>
+                <span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="o">==</span> <span class="n">o_idx</span><span class="p">:</span>
+                    <span class="c1"># new_node_is_o_idx += 1</span>
+                    <span class="c1"># print(&quot;got home&quot;)</span>
+                    <span class="k">continue</span>
+                <span class="c1"># new_node_passed_filters +=1</span>
+                <span class="n">trailblazer</span><span class="p">(</span><span class="n">d_idx</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)</span>
+                <span class="n">heappush</span><span class="p">(</span><span class="n">best_weight_node_queue</span><span class="p">,</span> <span class="p">(</span><span class="n">spent_weight</span> <span class="o">+</span> <span class="n">weight</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">))</span>
+
+    <span class="c1"># start = time.time()</span>
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">distance_matrix</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">od_scope</span> <span class="o">=</span> <span class="n">od_scope</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="c1"># combining_sets = time.time() - start</span>
+    <span class="k">if</span> <span class="n">o_graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">network</span><span class="o">.</span><span class="n">update_light_graph</span><span class="p">(</span>
+            <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
+            <span class="n">remove_nodes</span><span class="o">=</span><span class="p">[</span><span class="n">o_idx</span><span class="p">]</span>
+        <span class="p">)</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    print(f&quot;{queue_counter = }\n&quot;</span>
+<span class="sd">          f&quot;{queue_neighbor_counter = }\n&quot;</span>
+<span class="sd">          f&quot;{current_is_better = }\n&quot;</span>
+<span class="sd">          f&quot;{found_better_updates = }\n&quot;</span>
+<span class="sd">          f&quot;{found_new_node = }\n&quot;</span>
+<span class="sd">          f&quot;{new_node_is_deadend = }\n&quot;</span>
+<span class="sd">          f&quot;{new_node_out_of_scope = }\n&quot;</span>
+<span class="sd">          f&quot;{new_node_cant_reach_o = }\n&quot;</span>
+<span class="sd">          f&quot;{new_node_passed_filters = }\n&quot;</span>
+<span class="sd">          f&quot;{node_is_new_trailhead = }\n&quot;</span>
+<span class="sd">          f&quot;{new_node_is_o_idx = }\n&quot;</span>
+<span class="sd">          f&quot;{max_queue_length = }\n&quot;</span>
+<span class="sd">          f&quot;{trailblazer_early_termination = }\n&quot;</span>
+<span class="sd">          f&quot;{len(od_scope) = }\n&quot;</span>
+<span class="sd">          f&quot;{len(d_idxs) = }\n&quot;</span>
+<span class="sd">          f&quot;{combining_sets = }\n&quot;</span>
+<span class="sd">          f&quot;{better_update_difference_total/found_better_updates = }\n&quot;</span>
+<span class="sd">          )</span>
+<span class="sd">      &#39;&#39;&#39;</span>
+
+    <span class="k">return</span> <span class="n">od_scope</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">d_idxs</span></div>
+
+
+<div class="viewcode-block" id="bfs_paths_many_targets_iterative"><a class="viewcode-back" href="../../../reference/madina.una.html#madina.una.paths.bfs_paths_many_targets_iterative">[docs]</a><span class="k">def</span> <span class="nf">bfs_paths_many_targets_iterative</span><span class="p">(</span><span class="n">network</span><span class="p">:</span> <span class="n">Network</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">o_idx</span><span class="p">,</span> <span class="n">d_idxs</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">turn_penalty</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">od_scope</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generate all the paths from the given origin to all destinations, given the distance matrix and</span>
+<span class="sd">    the nodes it can reach (the od_scope)8</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># TODO: implement this as an iterative function with a queue</span>
+
+    <span class="c1"># remove any unnecccisary checks for other algorithms and methods. fucus on network distance.</span>
+
+    <span class="c1"># Think if there is value for the queue to be priority (Neighbor with most dests, neighbor</span>
+    <span class="c1"># with least neighbors, ...)</span>
+
+    <span class="c1"># Rethink the remaining dests list. should it be additive (no copy?) or should</span>
+    <span class="c1"># it copy previous and be subtractvd?</span>
+
+    <span class="c1"># collect stats about checks so they&#39;re ordered effeciently (hard checks first to narrow funnel.)</span>
+
+    <span class="c1"># check if using a generic graph is okay instead of needing to implement a</span>
+    <span class="c1"># narrow graph in previous step. This cuts many previous preprocessinggs.</span>
+
+    <span class="c1"># see if checks could be moved to earlier steps, or brought from previous steps. for less checks.</span>
+
+    <span class="c1"># TODO: for turn implementation, make sure to account for turns whenever distance_matrix is updated. Twice in the current version.</span>
+    <span class="c1">#  better yet, make sure to include turns as part of spent_weight so it runs through all the termination conditions.</span>
+
+    <span class="c1"># TODO: should this also be done in graph generation to limit scope? prob yes but need to keep track of predecessor.</span>
+
+    <span class="n">node_gdf</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span>
+    <span class="n">edge_gdf</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">edges</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">d_idx</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="p">:</span>
+        <span class="n">paths</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">distances</span><span class="p">[</span><span class="n">d_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># queue initialization</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([])</span>
+    <span class="c1"># for neighbor in list(graph.neighbors(o_idx)):</span>
+    <span class="c1"># q.append(([], o_idx, list(d_idxs.keys()), 0))</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(([</span><span class="n">o_idx</span><span class="p">],</span> <span class="n">o_idx</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">d_idxs</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+        <span class="n">visited</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">targets_remaining</span><span class="p">,</span> <span class="n">current_weight</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">od_scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scope_neighbors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">source</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scope_neighbors</span> <span class="o">=</span> <span class="p">[</span><span class="n">neighbor</span> <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">source</span><span class="p">))</span> <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">od_scope</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">scope_neighbors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># the given graph have 2 neighbors for origins and destinations. if a node has only one</span>
+            <span class="c1"># neighbor, its a deadend.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># print(f&quot;__________{neighbor = }________________&quot;)</span>
+            <span class="n">turn_cost</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">turn_penalty</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">turn_cost</span> <span class="o">=</span> <span class="n">turn_penalty_value</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">source</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)</span>
+
+            <span class="n">spent_weight</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[(</span><span class="n">source</span><span class="p">,</span> <span class="n">neighbor</span><span class="p">)][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+            <span class="n">neighbor_current_weight</span> <span class="o">=</span> <span class="n">current_weight</span> <span class="o">+</span> <span class="n">spent_weight</span> <span class="o">+</span> <span class="n">turn_cost</span>
+            <span class="n">neighbor_targets_remaining</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="w">            </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            for target in targets_remaining:</span>
+<span class="sd">                if neighbor_current_weight &lt;= d_idxs[target]:</span>
+<span class="sd">                    if neighbor in distance_matrix[target]:</span>
+<span class="sd">                        point_distance = distance_matrix[target][neighbor]</span>
+<span class="sd">                        if (point_distance + neighbor_current_weight) &lt;= d_idxs[target]:</span>
+<span class="sd">                            neighbor_targets_remaining.append(target)</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+
+            <span class="n">neighbor_targets_remaining</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># TODO think if flipping distance_matrix indexing is better for this</span>
+            <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets_remaining</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">distance_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">distance_matrix</span><span class="p">[</span><span class="n">target</span><span class="p">][</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">+</span> <span class="n">neighbor_current_weight</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">round</span><span class="p">(</span><span class="n">d_idxs</span><span class="p">[</span><span class="n">target</span><span class="p">],</span><span class="mi">6</span><span class="p">):</span>
+                        <span class="n">neighbor_targets_remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbor_targets_remaining</span><span class="p">:</span>
+                <span class="n">paths</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">visited</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d_idxs</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">neighbor</span><span class="p">])</span>
+                <span class="c1"># paths[neighbor] = paths[neighbor] + [[x for x in visited if x not in d_idxs] + [neighbor]]</span>
+                <span class="n">distances</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor_current_weight</span><span class="p">)</span>
+                <span class="c1"># distances[neighbor] = distances[neighbor] + [neighbor_current_weight]</span>
+                <span class="n">neighbor_targets_remaining</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbor_targets_remaining</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># visited, source, targets_remaining, current_weight</span>
+            <span class="c1"># q.append((visited + [neighbor], neighbor, neighbor_targets_remaining, neighbor_current_weight))</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="n">visited</span> <span class="o">+</span> <span class="p">[</span><span class="n">neighbor</span><span class="p">],</span> <span class="n">neighbor</span><span class="p">,</span> <span class="n">neighbor_targets_remaining</span><span class="p">,</span> <span class="n">neighbor_current_weight</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">paths</span><span class="p">,</span> <span class="n">distances</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, City Form Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
